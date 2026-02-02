@@ -31,7 +31,6 @@ app.get('/messages', async (req, res)=>{
 
 app.post('/messages', async (req, res)=>{
     try {
-        console.log(req.body)
         const role = req.body?.role;
         const message_content = req.body?.message_content;
         const values = [role, message_content];
