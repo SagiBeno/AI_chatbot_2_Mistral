@@ -31,12 +31,26 @@ app.get('/messages', async (req, res)=>{
 
 app.post('/messages', async (req, res)=>{
     try {
-        const {role, message_content} = req.body
-        const values = 'TODO'
-        const sql = 'INSERT INTO chat_completions TODO'
-        let [result, fields] = [[], []] // TODO
-        console.log('result', result)
-        return res.status(201).json({result, fields})
+        console.log(req.body)
+        const role = req.body?.role;
+        const message_content = req.body?.message_content;
+        const values = [role, message_content];
+
+        connection.query(`
+                INSERT INTO chat_completions (role, message_content) VALUES (?, ?)
+            `,
+            values,
+            (err, result, fields) => {
+                if (err) {
+                    console.warn(err);
+                    return res.status(500).json('SQL exception');
+                }
+                else {
+                    console.log('result', result)
+                    return res.status(201).json({result, fields})
+                }
+            }
+        );
     } catch (error) {
         console.warn('error', error)
         return res.status(400).json({error})        
