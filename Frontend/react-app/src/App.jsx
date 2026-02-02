@@ -23,11 +23,11 @@ export default class App extends React.Component {
     const mistralAiApiKey = import.meta.env.VITE_MISTRAL_AI_API_KEY // set in .env var
     console.log('mistralAiApiKey.length', mistralAiApiKey.length) // should be around 32
 
-    this.mistralClient = new Mistral({apiKey: mistralAiApiKey});
+    this.mistralClient = new Mistral({ apiKey: mistralAiApiKey });
     // 'read https://docs.mistral.ai/api/endpoint/chat'
     console.log('mistralClient', this.mistralClient)
 
-    this.setState({mistralAiApiKey, mistralClient: this.mistralClient})
+    this.setState({ mistralAiApiKey, mistralClient: this.mistralClient })
   }
 
   sendQuestion = async () => {
@@ -35,8 +35,8 @@ export default class App extends React.Component {
     const question = 'TODO'
     //console.log('sendQuestion question', question);
 
-    const requestBodyObj = {...this.state.conversation};
-    requestBodyObj.messages.push({role: 'user', content: 'TODO'})
+    const requestBodyObj = { ...this.state.conversation };
+    requestBodyObj.messages.push({ role: 'user', content: 'TODO' })
     //console.log('requestBodyObj', requestBodyObj)
 
     // TODO - callout to POST /messages
@@ -62,31 +62,32 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <Flex direction="column" height="100vh" p="3" gap="3" style={{margin: '10px'}}>
+      <Flex direction="column" height="100vh" p="3" gap="3" style={{ margin: '10px' }}>
         {/* Header */}
         <Box>
+
           <Text size="4" weight="bold">
             <Strong>AI Chat</Strong>
           </Text>
         </Box>
 
         {/* Conversation area */}
-        <div 
-          type="always" 
+        <div
+          type="always"
           scrollbars="vertical"
           style={{
             flex: 1,                    // fills remaining height
             overflowY: 'auto',
             height: '600px',
-            
+
             border: "1px solid #ccc",
             borderRadius: 8,
             backgroundColor: "#fafafa"
           }}
         >
-          <Box p="2" style={{padding: '2px'}}>
+          <Box p="2" style={{ padding: '2px' }}>
             {this.state.conversation.messages.length === 0 ? (
-              <Text color="gray">No messages yet…</Text>
+              <Text color="gray" style={{ userSelect: "none", opacity: '0.5' }}>No messages yet…</Text>
             ) : (
               this.state.conversation.messages.map((msg, i) => {
 
@@ -104,22 +105,33 @@ export default class App extends React.Component {
           </Box>
         </div>
 
-
         {/* Input bar or Spinner */}
 
-        {this.state.isLoading ? <Spinner size='2' /> :
-          <Box onKeyDown={this.handleEnter}>
-            <p>
-              <input type="text" id="inputQuestion" name="inputQuestion" placeholder="Ask…"
-              style={{minWidth: '90vw', minHeight: '40px'}}
-              onChange={e=>this.setState({question: e.target.value})} />
-              <IconButton onClick={this.sendQuestion} id='btnSend' name='btnSend' aria-label='btnSend'>
-                <PaperPlaneIcon />
-              </IconButton>
-            </p>
-          </Box>
+        <Flex onKeyDown={this.handleEnter}
+          direction='row'
+          justify='between'
+          align='center'
+          style={{ minWidth: '90vw', minHeight: '40px' }}
+        >
+            <input
+              style={{width: '95%', minHeight: '100%', borderRadius: '20px', padding: '0 5px', marginRight: '5px'}}
+              type="text"
+              id="inputQuestion"
+              name="inputQuestion"
+              placeholder="Ask…"
+              onChange={e => this.setState({ question: e.target.value })} 
+            />
+              {
+                this.state.isLoading 
+                  ? 
+                    <Spinner size='2' /> 
+                  :
+                    <IconButton onClick={this.sendQuestion} id='btnSend' name='btnSend' aria-label='btnSend'>
+                      <PaperPlaneIcon />
+                    </IconButton>
+              }
 
-        }
+        </Flex>
       </Flex>
     );
   }
