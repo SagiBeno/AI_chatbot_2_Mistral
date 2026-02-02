@@ -24,7 +24,7 @@ export default class App extends React.Component {
     console.log('mistralAiApiKey.length', mistralAiApiKey.length) // should be around 32
 
     this.mistralClient = new Mistral({apiKey: mistralAiApiKey});
-    //'TODO read https://docs.mistral.ai/api/endpoint/chat '
+    // 'read https://docs.mistral.ai/api/endpoint/chat'
     console.log('mistralClient', this.mistralClient)
 
     this.setState({mistralAiApiKey, mistralClient: this.mistralClient})
@@ -107,8 +107,7 @@ export default class App extends React.Component {
 
         {/* Input bar or Spinner */}
 
-        {this.state.isLoading ? <p>&#x23F3; LOADING &#x23F3; </p> :
-
+        {this.state.isLoading ? <Spinner size='2' /> :
           <Box onKeyDown={this.handleEnter}>
             <p>
               <input type="text" id="inputQuestion" name="inputQuestion" placeholder="Ask…"
@@ -121,8 +120,6 @@ export default class App extends React.Component {
           </Box>
 
         }
-
-
       </Flex>
     );
   }
