@@ -23,8 +23,9 @@ export default class App extends React.Component {
     const mistralAiApiKey = import.meta.env.VITE_MISTRAL_AI_API_KEY // set in .env var
     console.log('mistralAiApiKey.length', mistralAiApiKey.length) // should be around 32
 
-    this.mistralClient = 'TODO read https://docs.mistral.ai/api/endpoint/chat '
-    // console.log('mistralClient', this.mistralClient)
+    this.mistralClient = new Mistral({apiKey: mistralAiApiKey});
+    //'TODO read https://docs.mistral.ai/api/endpoint/chat '
+    console.log('mistralClient', this.mistralClient)
 
     this.setState({mistralAiApiKey, mistralClient: this.mistralClient})
   }
