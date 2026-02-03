@@ -62,9 +62,10 @@ export default class App extends React.Component {
               }))
             }
           }),
-          this.scrollToBottom
-        );
-      }})
+            this.scrollToBottom
+          );
+        }
+      })
       .catch(err => {
         console.warn('GET /messages error', err);
       });
@@ -92,7 +93,8 @@ export default class App extends React.Component {
             ...prev.conversation.messages,
             { role: 'user', content: question }
           ]
-        }}),
+        }
+      }),
         this.scrollToBottom
       );
 
@@ -139,7 +141,8 @@ export default class App extends React.Component {
             ...prev.conversation.messages,
             updatedMessages
           ]
-        }}),
+        }
+      }),
         this.scrollToBottom
       );
 
@@ -229,15 +232,32 @@ export default class App extends React.Component {
           align='center'
           style={{ minWidth: '100%', minHeight: '40px' }}
         >
-          <input
-            style={{ width: '95%', minHeight: '100%', borderRadius: '20px', padding: '0 5px', marginRight: '5px' }}
-            type="text"
-            id="inputQuestion"
-            name="inputQuestion"
-            placeholder="Ask…"
-            onChange={e => this.setState({ question: e.target.value })}
-            value={this.state.question}
-          />
+          {
+            this.state.isLoading
+              ?
+              <input
+                style={{ width: '95%', minHeight: '100%', borderRadius: '20px', padding: '0 5px', marginRight: '5px' }}
+                type="text"
+                id="inputQuestion"
+                name="inputQuestion"
+                placeholder="Ask…"
+                onChange={e => this.setState({ question: e.target.value })}
+                value={this.state.question}
+                disabled
+              />
+              :
+              <input
+                style={{ width: '95%', minHeight: '100%', borderRadius: '20px', padding: '0 5px', marginRight: '5px' }}
+                type="text"
+                id="inputQuestion"
+                name="inputQuestion"
+                placeholder="Ask…"
+                onChange={e => this.setState({ question: e.target.value })}
+                value={this.state.question}
+              />
+
+          }
+
           {
             this.state.isLoading
               ?
