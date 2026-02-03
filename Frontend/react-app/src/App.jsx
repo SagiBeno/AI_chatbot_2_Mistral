@@ -58,7 +58,7 @@ export default class App extends React.Component {
               ...prev.conversation,
               messages: data.results.map(m => ({
                 role: m.role,
-                message_content: m.message_content
+                content: m.message_content
               }))
             }
           }),
@@ -90,7 +90,7 @@ export default class App extends React.Component {
           ...prev.conversation,
           messages: [
             ...prev.conversation.messages,
-            { role: 'user', message_content: question }
+            { role: 'user', content: question }
           ]
         }}),
         this.scrollToBottom
@@ -101,7 +101,7 @@ export default class App extends React.Component {
         const resJSON = await fetch('http://localhost:3333/messages', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ role: 'user', message_content: question })
+          body: JSON.stringify({ role: 'user', content: question })
         });
 
         const res = await resJSON.json();
@@ -114,18 +114,13 @@ export default class App extends React.Component {
       console.log('mistralClient in sendQuestion', mistralClient);
 
       if (!mistralClient) {
-        console.warn('mistralClient is null - componentDidMount még nem futott le?');
+        console.warn('mistralClient is null');
         return;
       }
 
       let chatResponse = await mistralClient.chat.complete({
         model: this.state.conversation.model,
-        messages: [
-          {
-            content: question,
-            role: 'user',
-          },
-        ],
+        messages: [...this.state.conversation.messages]
       });
 
       console.log('chatResponse', chatResponse);
@@ -133,7 +128,7 @@ export default class App extends React.Component {
       // Update conversation with response
       let updatedMessages = {
         role: chatResponse.choices[0].message.role,
-        message_content: chatResponse.choices[0].message.content
+        content: chatResponse.choices[0].message.content
       };
       console.log('updatedMessages', updatedMessages);
 
@@ -205,7 +200,7 @@ export default class App extends React.Component {
               this.state.conversation.messages.map((msg, i) => {
 
                 // Remove <think>...</think>
-                const cleaned = msg.message_content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
+                const cleaned = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
                 return (
 
                   <Flex justify={msg.role === 'user' ? "end" : "start"} key={i}>

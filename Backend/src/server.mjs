@@ -34,12 +34,12 @@ app.get("/messages", async (req, res) => {
 app.post("/messages", async (req, res) => {
     try {
         const role = req.body?.role;
-        const message_content = req.body?.message_content;
+        const content = req.body?.content;
 
-        if (!role || !message_content) return res.status(400).json({ error: "Invalid data" });
+        if (!role || !content) return res.status(400).json({ error: "Invalid data" });
 
         const sql = "INSERT INTO chat_completions (role, message_content) VALUES (?, ?)";
-        const values = [role, message_content];
+        const values = [role, content];
 
         const [result, fields] = await connection.execute(sql, values);
 
