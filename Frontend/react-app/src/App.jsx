@@ -52,7 +52,7 @@ export default class App extends React.Component {
       .then(data => {
         console.log('GET /messages response', data);
 
-        if (Array.isArray(data.results)) {
+        if (data.results.length > 0) {
           this.setState(prev => ({
             conversation: {
               ...prev.conversation,
@@ -83,9 +83,6 @@ export default class App extends React.Component {
     this.setState({ question: '', isLoading: true });
 
     try {
-      const requestBodyObj = { ...this.state.conversation };
-      console.log('requestBodyObj', requestBodyObj);
-
       this.setState(prev => ({
         conversation: {
           ...prev.conversation,
@@ -161,18 +158,19 @@ export default class App extends React.Component {
       }
 
     } catch (err) {
-      console.error('sendQuestion hiba:', err);
+      console.error('sendQuestion error:', err);
     } finally {
       this.setState({ isLoading: false });
     }
   }
+
   handleEnter = e => {
     if (e.key == 'Enter' && this.state.question.length > 0) this.sendQuestion();
   }
 
   render() {
     return (
-      <Flex direction="column" height="90vh" p="3" gap="3" style={{ margin: '10px' }} width='90vw'>
+      <Flex direction="column" height="90vh" p="1" gap="3" width='90vw'>
         {/* Header */}
         <Box>
 
