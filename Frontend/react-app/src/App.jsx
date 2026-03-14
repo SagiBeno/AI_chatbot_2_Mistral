@@ -208,7 +208,7 @@ export default class App extends React.Component {
                     <Card
                       style={msg.role === 'user' ? this.state.userStyle : this.state.assistantStyle}
                     >
-                      <h5>{msg.role === 'user' ? <PersonIcon /> : <DesktopIcon />} {msg.role}</h5>
+                      <h5>{msg.role === 'user' ? <PersonIcon /> : <DesktopIcon />} {msg.role === 'user' ? 'User' : 'Mistral'}</h5>
                       <ReactMarkdown>{cleaned}</ReactMarkdown>
                     </Card>
                   </Flex>
