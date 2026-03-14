@@ -1,5 +1,5 @@
 /** backend.test.mjs */
-import { expect, vi } from 'vitest';
+import { expect, vi, describe, test, beforeEach, it } from 'vitest';
 import request from 'supertest';
 import { app, port, connection } from './server.mjs';
 
@@ -18,15 +18,16 @@ vi.mock('mysql2/promise', () => {
 
 describe('Server connections', () => {
   test('backend port', () => {
-    expect('TODO').toBe('TODO')
+    expect(port).toBe(3333)
   });
 
   test('MySQL connection', () => {
-    expect('TODO').toBe('TODO')
+    expect(connection).toBeDefined();
+    expect(connection.execute).toBeDefined();
   });
 
   test('app', () => {
-    expect('TODO').toBe('TODO')
+    expect(app).toBeDefined();
   });
 });
 
