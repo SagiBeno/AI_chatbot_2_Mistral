@@ -32,3 +32,13 @@ test('user can type in the input field', async () => {
 
   expect(input).toHaveValue('Hello AI');
 });
+
+test('pressing Enter clears the input when it has text', async () => {
+  render(<App />);
+
+  const input = screen.getByPlaceholderText(/Ask/i);
+
+  await userEvent.type(input, 'Hello AI{enter}');
+
+  expect(input).toHaveValue('');
+});
