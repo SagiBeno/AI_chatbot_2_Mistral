@@ -32,11 +32,16 @@ describe('Server connections', () => {
 });
 
 describe('Raw test endpoints', () => {
-  test('GET /messages', () => {
+  test('GET /messages', async () => {
     const mockResults = [{ id: 1, thread_id: 1, role: 'user', message_content: 'Hello' }];
     const mockFields = [];
-    connection.query.mockResolvedValue([mockResults, mockFields]);
-    expect('TODO').toBe('TODO')
+    connection.execute.mockResolvedValue([mockResults, mockFields]);
+
+    const response = await request(app).get('/messages');
+
+    expect(response.status).toBe(200);
+    expect(response.body.results).toEqual(mockResults);
+    expect(response.body.fields).toEqual(mockFields);
   });
 });
 
