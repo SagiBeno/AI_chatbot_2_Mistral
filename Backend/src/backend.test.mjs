@@ -43,6 +43,10 @@ describe('Raw test endpoints', () => {
     expect(response.body.results).toEqual(mockResults);
     expect(response.body.fields).toEqual(mockFields);
   });
+
+  test('should return 404 for unknown route', async () => {
+    const response = await request(app).get('/unknown-route');
+  });
 });
 
 describe('POST /messages', () => {
@@ -67,11 +71,19 @@ describe('POST /messages', () => {
     expect(response.body.result).toEqual(mockResult);
   });
 
-  it('should return 400 for invalid data', async () => {
+  it('should return 400 when content is missing', async () => {
     const response = await request(app)
       .post('/messages')
       .send({
         role: 'user'
+      })
+  });
+
+  it('should return 400 when role is missing', async () => {
+    const response = await request(app)
+      .post('/messages')
+      .send({
+        content: 'Hello world'
       })
   });
 });
