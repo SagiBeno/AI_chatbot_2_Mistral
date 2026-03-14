@@ -1,5 +1,5 @@
 /** backend.test.mjs */
-import { expect, vi } from 'vitest';
+import { expect, vi, describe, test, beforeEach, it } from 'vitest';
 import request from 'supertest';
 import { app, port, connection } from './server.mjs';
 
@@ -18,24 +18,34 @@ vi.mock('mysql2/promise', () => {
 
 describe('Server connections', () => {
   test('backend port', () => {
-    expect('TODO').toBe('TODO')
+    expect(port).toBe(3333)
   });
 
   test('MySQL connection', () => {
-    expect('TODO').toBe('TODO')
+    expect(connection).toBeDefined();
+    expect(connection.execute).toBeDefined();
   });
 
   test('app', () => {
-    expect('TODO').toBe('TODO')
+    expect(app).toBeDefined();
   });
 });
 
 describe('Raw test endpoints', () => {
-  test('GET /messages', () => {
+  test('GET /messages', async () => {
     const mockResults = [{ id: 1, thread_id: 1, role: 'user', message_content: 'Hello' }];
     const mockFields = [];
-    connection.query.mockResolvedValue([mockResults, mockFields]);
-    expect('TODO').toBe('TODO')
+    connection.execute.mockResolvedValue([mockResults, mockFields]);
+
+    const response = await request(app).get('/messages');
+
+    expect(response.status).toBe(200);
+    expect(response.body.results).toEqual(mockResults);
+    expect(response.body.fields).toEqual(mockFields);
+  });
+
+  test('should return 404 for unknown route', async () => {
+    const response = await request(app).get('/unknown-route');
   });
 });
 
@@ -44,14 +54,36 @@ describe('POST /messages', () => {
     vi.clearAllMocks();
   });
 
-  it('should insert a message with valid data', () => {
+  it('should insert a message with valid data', async () => {
     const mockResult = { insertId: 1, affectedRows: 1 };
+    const mockFields = [];
+
     connection.execute.mockResolvedValue([mockResult, []]);
-    expect('TODO').toBe('TODO')
+    
+    const response = await request(app)
+      .post('/messages')
+      .send({
+        role: 'user',
+        content: 'Hello world'
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body.result).toEqual(mockResult);
   });
 
-  it('should return 400 for invalid data', () => {
-    connection.execute.mockRejectedValue(new Error('Invalid data'));
-    expect('TODO').toBe('TODO')
+  it('should return 400 when content is missing', async () => {
+    const response = await request(app)
+      .post('/messages')
+      .send({
+        role: 'user'
+      })
+  });
+
+  it('should return 400 when role is missing', async () => {
+    const response = await request(app)
+      .post('/messages')
+      .send({
+        content: 'Hello world'
+      })
   });
 });

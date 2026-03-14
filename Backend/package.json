@@ -7,7 +7,10 @@
   "type": "module",
   "main": "index.mjs",
   "scripts": {
-    "test": "set NODE_OPTIONS=--experimental-vm-modules && jest"
+    "start": "node src/index.mjs",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "jest": {
     "testEnvironment": "node",
@@ -17,8 +20,11 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "jest": "^30.2.0",
-    "mysql2": "^3.16.2",
+    "mysql2": "^3.16.2"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.0",
     "supertest": "^7.2.2",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.0"
   }
 }
