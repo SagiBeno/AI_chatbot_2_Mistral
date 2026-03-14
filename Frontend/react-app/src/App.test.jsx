@@ -42,3 +42,15 @@ test('pressing Enter clears the input when it has text', async () => {
 
   expect(input).toHaveValue('');
 });
+
+test('clicking send clears the input when it has text', async () => {
+  render(<App />);
+
+  const input = screen.getByPlaceholderText(/Ask/i);
+  const sendButton = screen.getByRole('button', { name: 'btnSend' });
+
+  await userEvent.type(input, 'Hello AI');
+  await userEvent.click(sendButton); 
+
+  expect(input).toHaveValue('');
+});
