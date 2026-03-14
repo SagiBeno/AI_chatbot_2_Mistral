@@ -54,3 +54,16 @@ test('clicking send clears the input when it has text', async () => {
 
   expect(input).toHaveValue('');
 });
+
+test('disables input and hides send button when loading', () => {
+  const app = new App();
+
+  app.state.isLoading = true;
+
+  render(app.render());
+
+  const input = screen.getByPlaceholderText(/Ask/i);
+  expect(input).toBeDisabled();
+
+  expect(screen.queryByRole('button', { name: 'btnSend' })).toBeNull;
+});
