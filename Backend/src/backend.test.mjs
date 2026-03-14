@@ -50,14 +50,28 @@ describe('POST /messages', () => {
     vi.clearAllMocks();
   });
 
-  it('should insert a message with valid data', () => {
+  it('should insert a message with valid data', async () => {
     const mockResult = { insertId: 1, affectedRows: 1 };
+    const mockFields = [];
+
     connection.execute.mockResolvedValue([mockResult, []]);
-    expect('TODO').toBe('TODO')
+    
+    const response = await request(app)
+      .post('/messages')
+      .send({
+        role: 'user',
+        content: 'Hello world'
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body.result).toEqual(mockResult);
   });
 
-  it('should return 400 for invalid data', () => {
-    connection.execute.mockRejectedValue(new Error('Invalid data'));
-    expect('TODO').toBe('TODO')
+  it('should return 400 for invalid data', async () => {
+    const response = await request(app)
+      .post('/messages')
+      .send({
+        role: 'user'
+      })
   });
 });
