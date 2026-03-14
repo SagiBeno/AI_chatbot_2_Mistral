@@ -67,3 +67,13 @@ test('disables input and hides send button when loading', () => {
 
   expect(screen.queryByRole('button', { name: 'btnSend' })).toBeNull;
 });
+
+test('render a message in the conversation', () => {
+  const app = new App();
+
+  app.state.conversation.messages = [ { role: 'user', content: 'Hello AI' } ];
+
+  render(app.render());
+
+  expect(screen.getByText('Hello AI')).toBeInTheDocument();
+});
